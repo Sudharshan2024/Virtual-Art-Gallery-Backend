@@ -31,7 +31,7 @@ public class AuthController {
 
 	    if (isValid) {
 	        response.put("token", "dummy-token-" + user.getUsername()); // No actual JWT needed
-	        return ResponseEntity.ok(response);
+	        return ResponseEntity.ok().body(response);
 	    } else {
 	        response.put("error", "Invalid user");
 	        return ResponseEntity.status(401).body(response);
