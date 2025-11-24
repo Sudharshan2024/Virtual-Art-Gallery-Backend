@@ -1,5 +1,8 @@
 package com.artgallery.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +24,19 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody User user) {
-		boolean isValid = userService.login(user.getUsername(), user.getPassword());
-		return isValid ? ResponseEntity.ok("SUCCESS") : ResponseEntity.status(401).body("INVALID");
+	public ResponseEntity<Map<String, String>> login(@RequestBody User user) {
+	    boolean isValid = userService.login(user.getUsername(), user.getPassword());
+
+	    Map<String, String> response = new HashMap<>();
+
+	    if (isValid) {
+	        response.put("token", "dummy-token-" + user.getUsername()); // No actual JWT needed
+	        return ResponseEntity.ok(response);
+	    } else {
+	        response.put("error", "Invalid user");
+	        return ResponseEntity.status(401).body(response);
+	    }
 	}
+
 }
 
